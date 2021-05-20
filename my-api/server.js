@@ -3,7 +3,11 @@ const { ApolloServer, gql } = require('apollo-server');
 const schema = gql(`
   type Query {
     currentUser: User
+    currentUser2: User
+    currentUser3: User
     postsByUser(userId: String!): [Post]
+    postsByUser2(userId: String!): [Post]
+    postsByUser3(userId: String!): [Post]
   }
 
   type Mutation {
@@ -34,27 +38,33 @@ data.posts = [
   {
     id: 'xyz-2',
     content: "Second Post - Hello again",
-    userId: 'abc-1',
+    userId: 'abc-2',
   },
   {
     id: 'xyz-3',
-    content: "Random Post",
-    userId: 'abc-2',
+    content: "Third Post - Hello again",
+    userId: 'abc-3',
   }
 ];
 
 data.users = [
   {
     id: 'abc-1', 
-    username: "andy25",
+    username: "Nydia Wesdi",
   },
   {
     id: 'abc-2', 
-    username: "randomUser",
+    username: "Azman Musa",
+  },
+  {
+    id: 'abc-3', 
+    username: "Barizah Khasfullah",
   }
 ];
 
 const currentUserId = 'abc-1';
+const currentUserId2 = 'abc-2';
+const currentUserId3 = 'abc-3';
 
 var resolvers = {
   Mutation: {
@@ -73,9 +83,25 @@ var resolvers = {
       let user = context.data.users.find( u => u.id === context.currentUserId );
       return user;
     },
+    currentUser2: (parent, args, context) => {
+      let user = context.data.users.find( u => u.id === context.currentUserId2 );
+      return user;
+    },
+    currentUser3: (parent, args, context) => {
+      let user = context.data.users.find( u => u.id === context.currentUserId3 );
+      return user;
+    },
     postsByUser: (parent, args, context) => {
       let posts = context.data.posts.filter( p => p.userId === args.userId ); 
       return posts
+    },
+    postsByUser2: (parent, args, context) => {
+      let secondposts = context.data.posts.filter( p => p.userId === args.userId ); 
+      return secondposts
+    },
+    postsByUser3: (parent, args, context) => {
+      let thirdposts = context.data.posts.filter( p => p.userId === args.userId ); 
+      return thirdposts
     },
   },
   User: {
@@ -91,6 +117,8 @@ const server = new ApolloServer({
   resolvers: resolvers,
   context: { 
     currentUserId,
+    currentUserId2,
+    currentUserId3,
     data
   }
 });
